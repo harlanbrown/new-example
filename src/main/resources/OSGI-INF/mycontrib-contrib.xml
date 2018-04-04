@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.mycontrib">
+
+  <extension target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent" point="command">
+    <!-- 
+    You might find some help here:
+    https://explorer.nuxeo.com/nuxeo/site/distribution/latest/viewExtensionPoint/org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent--command
+    -->
+  </extension>
+
+</component>
