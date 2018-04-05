@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.mycontrib.commands">
+
+  <extension target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl" point="converter">
+    <converter name="testcmd" class="org.nuxeo.ecm.platform.convert.plugins.CommandLineConverter">
+      <sourceMimeType>image/jpeg</sourceMimeType>
+      <destinationMimeType>text/plain</destinationMimeType>
+      <parameters>
+        <parameter name="CommandLineName">testcmd</parameter>
+      </parameters>
+    </converter>
+  </extension>
+  
+  <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
+  <extension target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent" point="command">
+    <command name="testcmd" enabled="true">
+      <commandLine>rem</commandLine>
+      <parameterString>AAA BBB CCC</parameterString>
+      <installationDirective>Hi</installationDirective>
+    </command>
+  </extension>
+
+  <extension point="command" target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent">
+    <command name="extractLayerMetadata" enabled="true">
+      <commandLine>exiftool</commandLine>
+      <parameterString>-layernames #{sourceFilePath}</parameterString>
+      <installationDirective>You need to install EXIFTool.
+    </installationDirective>
+    </command>
+  </extension>
+
+</component>

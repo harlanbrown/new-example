@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="org.nuxeo.ecm.platform.convert.commandline.imagemagick.override">
+
+  <require>org.nuxeo.ecm.platform.convert.commandline.imagemagick</require>
+  <require>org.nuxeo.ecm.platform.picture.commandline.imagemagick</require>
+  <require>org.nuxeo.ecm.platform.thumbnail.commandline.imagemagick</require>
+
+  <extension target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent" point="command">
+
+    <command enabled="true" name="converter">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet #{inputFilePath}[0] #{outputFilePath}</parameterString>
+      <winParameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet #{inputFilePath}[0] #{outputFilePath}</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+
+    <command enabled="true" name="identify">
+      <commandLine>magick</commandLine>
+      <parameterString>identify -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -ping -format '%m %w %h %z %[colorspace]' #{inputFilePath}[0]</parameterString>
+      <winParameterString>identify -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -ping -format "%m %w %h %z %[colorspace]" #{inputFilePath}[0]</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="crop">
+      <commandLine>magick</commandLine>
+      <parameterString>stream -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -map rgb -storage-type char -extract #{tileWidth}x#{tileHeight}+#{offsetX}+#{offsetY} #{inputFilePath}[0] - | convert -depth 8 -size #{tileWidth}x#{tileHeight} rgb:- #{outputFilePath}</parameterString>
+      <winParameterString>stream -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -map rgb -storage-type char -extract #{tileWidth}x#{tileHeight}+#{offsetX}+#{offsetY} #{inputFilePath}[0] - | convert -depth 8 -size #{tileWidth}x#{tileHeight} rgb:- #{outputFilePath}</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="resizer">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -depth #{targetDepth} #{inputFilePath}[0] jpg:- | convert - -resize #{targetWidth}x#{targetHeight} #{outputFilePath}</parameterString>
+      <winParameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -depth #{targetDepth} #{inputFilePath}[0] -resize #{targetWidth}x#{targetHeight} #{outputFilePath}</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="gifResizer">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -depth #{targetDept h} #{inputFilePath}[0] -coalesce -resize #{targetWidth}x#{targetHeight} -deconstruct #{outputFilePath}</parameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="jpegResizer">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten -depth #{targetDepth} #{inputFilePath}[0] jpg:- | convert - -resize #{targetWidth}x#{targetHeight} #{outputFilePath}</parameterString>
+      <winParameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -background white -flatten -depth #{targetDepth} #{inputFilePath}[0] -resize #{targetWidth}x#{targetHeight} #{outputFilePath}</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="rotate">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet #{inputFilePath}[0] -rotate #{angle} #{outputFilePath}</parameterString>
+      <winParameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet #{inputFilePath}[0] -rotate #{angle} #{outputFilePath}</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="cropAndResize">
+      <commandLine>magick</commandLine>
+      <parameterString>stream -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -map #{mapComponents} -storage-type char -extract #{tileWidth}x#{tileHeight}+#{offsetX}+#{offsetY} #{inputFilePath}[0] - | convert -depth 8 -size #{tileWidth}x#{tileHeight} -resize #{targetWidth}x#{targetHeight}! #{mapComponents}:- #{outputFilePath}</parameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+    <command enabled="true" name="multiTiler">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet #{inputFilePath}[0] -crop #{tileWidth}x#{tileHeight} +repage #{outputFilePath}</parameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+
+    <command enabled="true" name="toThumbnail">
+      <commandLine>magick</commandLine>
+      <parameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -strip -thumbnail #{size} -background transparent -gravity center -format png -quality 75 #{inputFilePath}[0] #{outputFilePath}</parameterString>
+      <winParameterString>convert -define registry:temporary-path=#{nuxeo.tmp.dir} -quiet -strip -thumbnail #{size} -background transparent -gravity center -format png -quality 75 #{inputFilePath}[0] #{outputFilePath}</winParameterString>
+      <installationDirective>You need to install ImageMagick.</installationDirective>
+    </command>
+
+  </extension>
+
+</component>
