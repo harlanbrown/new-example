@@ -1,11 +1,96 @@
 <?xml version="1.0"?>
 <component name="org.nuxeo.mycontrib">
+  <extension target="org.nuxeo.automation.scripting.internals.AutomationScriptingComponent" point="operation">
+    <scriptedOperation id="javascript.myscript">
+      <inputType>void</inputType>
+      <outputType>void</outputType>
+      <category>javascript</category>
+      <description></description>
+      <script><![CDATA[function run(input, params) {
+//var blib = Blob.CreateFromURL(input, {'file': 'https://robohash.org/blob.jpg'});
+//var result = Blob.RunConverter(blib, {'converter': 'testcmd'});
+ ctx.srcPath = '/path/to/something';
+ RunScript(
+ input, {
+   'script':'import org.nuxeo.runtime.api.Framework; import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService; import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters; import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult; cles=Framework.getService(CommandLineExecutorService); params = cles.getDefaultCmdParameters();  params.addNamedParameter("srcPath",Context["srcPath"]); res = cles.execCommand("testcmd", params); Context["res"]=res;'});
+var output = ctx.res.getOutput();
+  for (var i = 0; i < output.size(); i++){
+  Log(null, {'level':'error','message': output[i]});       
+       }
+}]]></script>
+    </scriptedOperation>
+  </extension>
+   
+  <extension target="org.nuxeo.automation.scripting.internals.AutomationScriptingComponent" point="operation">
+    <scriptedOperation id="javascript.png_convert_chain">
+      <inputType>void</inputType>
+      <outputType>void</outputType>
+      <category>javascript</category>
+      <description></description>
+<script><![CDATA[function run(input, params) {
+var srcFilePath = params.parameters.sourceFilePath;
+var properties = {};
+properties.sourceFilePath = params.parameters.sourceFilePath;
+properties.targetFilePath = params.parameters.targetFilePath;
+properties.conversionFormat = "png";
+properties.format = "png";
+properties.layerNum = 0;
+RunScript(input, {'script':'import org.nuxeo.runtime.api.Framework; import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService; import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters; import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult; cles = Framework.getService(CommandLineExecutorService); params = cles.getDefaultCmdParameters(); params.addNamedParameter("sourceFilePath", Context["srcFilePath"]); execResult = cles.execCommand("extractLayerMetadata", params); Context["execResult"]=execResult;'});
+var output = ctx.execResult.getOutput();
+for(var i = 0; i < output.size(); i++) {
+  Log(null, { 'level': 'error', 'message': output[i] });
+}
+return Blob.RunConverter(input, {"converter": "exportPsdLayerToPng", "parameters": convertToString(properties)});
+function convertToString(properties) {
+  var string = "";
+  for (var key in properties) {
+    if (properties.hasOwnProperty(key)) {
+      string += key + "=" + properties[key]+"\n";
+    }
+  }
+  return string;
+}}]]></script>
+    </scriptedOperation>
+  </extension>
+  
+  <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
+    <action id="myaction" label="myaction" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('javascript.myscript')}">
+      <category>DOCUMENT_UPPER_ACTION</category>
+      <filter id="filter@myaction">
+        <rule grant="true">
+          <type>File</type>
+        </rule>
+      </filter>
+    </action>
+  </extension>
+  
+<!-- Define a command line to run EXIFTool that extracts the image layer metadata -->
+  <extension point="command" target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent">
+    <command name="extractLayerMetadata" enabled="true">
+      <commandLine>exiftool</commandLine>
+      <parameterString>-layernames #{sourceFilePath}</parameterString>
+      <installationDirective>You need to install EXIFTool.
+    </installationDirective>
+    </command>
+  </extension>
 
+  <extension target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl" point="converter">
+    <converter name="testcmd" class="org.nuxeo.ecm.platform.convert.plugins.CommandLineConverter">
+      <sourceMimeType>image/jpeg</sourceMimeType>
+      <destinationMimeType>text/plain</destinationMimeType>
+      <parameters>
+        <parameter name="CommandLineName">testcmd</parameter>
+      </parameters>
+    </converter>
+  </extension>
+  
+  <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
   <extension target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent" point="command">
-    <!-- 
-    You might find some help here:
-    https://explorer.nuxeo.com/nuxeo/site/distribution/latest/viewExtensionPoint/org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent--command
-    -->
+    <command name="testcmd" enabled="true">
+      <commandLine>echo</commandLine>
+      <parameterString>AAA BBB CCC</parameterString>
+      <installationDirective>Hi</installationDirective>
+    </command>
   </extension>
 
 </component>
