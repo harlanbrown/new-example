@@ -8,16 +8,16 @@
       <category>javascript</category>
       <description></description>
       <script><![CDATA[function run(input, params) {
-//var blib = Blob.CreateFromURL(input, {'file': 'https://robohash.org/blob.jpg'});
-//var result = Blob.RunConverter(blib, {'converter': 'testcmd'});
- ctx.srcPath = '/path/to/something';
+ ctx.srcFilePath = '/path/to/something';
  RunScript(
  input, {
-   'script':'import org.nuxeo.runtime.api.Framework; import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService; import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters; import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult; cles=Framework.getService(CommandLineExecutorService); params = cles.getDefaultCmdParameters();  params.addNamedParameter("srcPath",Context["srcPath"]); res = cles.execCommand("testcmd", params); Context["res"]=res;'});
-var output = ctx.res.getOutput();
-  for (var i = 0; i < output.size(); i++){
+   'script':'import org.nuxeo.runtime.api.Framework; import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService; import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters; import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult; cles = Framework.getService(CommandLineExecutorService); params = cles.getDefaultCmdParameters(); params.addNamedParameter("srcFilePath", Context["srcFilePath"]); execResult = cles.execCommand("extractLayerMetadata", params); Context["execResult"]=execResult; '});
+
+var output = ctx.execResult.getOutput();
+for (var i = 0; i < output.size(); i++){
   Log(null, {'level':'error','message': output[i]});       
-       }
+}
+
 }]]></script>
     </scriptedOperation>
 
@@ -34,7 +34,8 @@ properties.targetFilePath = params.parameters.targetFilePath;
 properties.conversionFormat = "png";
 properties.format = "png";
 properties.layerNum = 0;
-RunScript(input, {'script':'import org.nuxeo.runtime.api.Framework; import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService; import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters; import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult; cles = Framework.getService(CommandLineExecutorService); params = cles.getDefaultCmdParameters(); params.addNamedParameter("sourceFilePath", Context["srcFilePath"]); execResult = cles.execCommand("extractLayerMetadata", params); Context["execResult"]=execResult;'});
+RunScript(input, {'script':'import org.nuxeo.runtime.api.Framework; import org.nuxeo.ecm.platform.commandline.executor.api.CommandLineExecutorService; import org.nuxeo.ecm.platform.commandline.executor.api.CmdParameters; import org.nuxeo.ecm.platform.commandline.executor.api.ExecResult; cles = Framework.getService(CommandLineExecutorService); params = cles.getDefaultCmdParameters(); params.addNamedParameter("sourceFilePath", Context["srcFilePath"]); execResult = cles.execCommand("extractLayerMetadata", params); Context["execResult"]=execResult; '});
+
 var output = ctx.execResult.getOutput();
 for(var i = 0; i < output.size(); i++) {
   Log(null, { 'level': 'error', 'message': output[i] });
@@ -50,6 +51,14 @@ function convertToString(properties) {
   return string;
 }}]]></script>
     </scriptedOperation>
-  </extension>
+<scriptedOperation id="javascript.sayhi">
+      <inputType>void</inputType>
+      <outputType>void</outputType>
+      <category>javascript</category>
+      <description></description>
+<script><![CDATA[function run(input, params) {
+  Log(null, { 'level': 'error', 'message': 'HI'});
+}}]]></script>
+    </scriptedOperation>  </extension>
   
 </component>

@@ -14,8 +14,8 @@
   <require>org.nuxeo.ecm.platform.commandline.executor.service.defaultContrib</require>
   <extension target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent" point="command">
     <command name="testcmd" enabled="true">
-      <commandLine>rem</commandLine>
-      <parameterString>AAA BBB CCC</parameterString>
+      <commandLine>whoami</commandLine>
+      <parameterString></parameterString>
       <installationDirective>Hi</installationDirective>
     </command>
   </extension>

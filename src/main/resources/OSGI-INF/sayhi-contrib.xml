@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.mycontrib">
+
+  <extension target="org.nuxeo.automation.scripting.internals.AutomationScriptingComponent" point="operation">
+    <scriptedOperation id="javascript.sayhi">
+      <inputType>void</inputType>
+      <outputType>void</outputType>
+      <category>javascript</category>
+      <description></description>
+<script><![CDATA[function run(input, params) {
+Log(null, { 'level': 'error', 'message': 'HI'});
+}]]></script>
+    </scriptedOperation>  
+  </extension>
+  
+</component>

@@ -6,4 +6,4 @@ Bundle-Version: 1.0.0
 Bundle-Name: new-example-core
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.nuxeo.new-example-core;singleton=true
-Nuxeo-Component: OSGI-INF/actions-contrib.xml, OSGI-INF/imagemagick-contrib.xml
+Nuxeo-Component: OSGI-INF/actions-contrib.xml, OSGI-INF/imagemagick-contrib.xml, OSGI-INF/commands-converters-contrib.xml, OSGI-INF/mycontrib-contrib.xml

@@ -5,15 +5,6 @@
   <extension target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
     <action id="myaction" label="myaction" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('javascript.myscript')}">
       <category>DOCUMENT_UPPER_ACTION</category>
-      <filter id="filter@myaction">
-        <rule grant="true">
-          <type>Domain</type>
-          <type>Picture</type>
-          <type>File</type>
-          <type>Workspace</type>
-          <type>Folder</type>
-        </rule>
-      </filter>
     </action>
   </extension>
   
